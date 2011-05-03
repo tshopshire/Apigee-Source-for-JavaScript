@@ -1,1 +1,0 @@
-var urlArray=["jquery_min.js","base64_min.js","source.js"];var urlPrefix="http://apigee.ubermondo.com/reorg/jumpbox/javascripts/";for(var i=0;i<urlArray.length;i++){document.write('<script type="text/javascript" src="'+urlPrefix+urlArray[i]+'"><\/script>')};

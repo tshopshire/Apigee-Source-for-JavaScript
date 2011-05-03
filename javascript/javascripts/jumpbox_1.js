@@ -1,1 +1,0 @@
-var urlArray=new Array("./javascripts/jquery_min.js","./javascripts/jumpstart_1.js");for(var i=0;i<urlArray.length;i++){document.write('<script type="text/javascript" src="'+urlArray[i]+'"><\/script>')};
