@@ -10,24 +10,6 @@
     <script src="https://github.com/apigee/Apigee-Source-for-JavaScript/raw/gh-pages/javascripts/base64_min.js" type="text/javascript"></script>
     <script src="https://github.com/apigee/Apigee-Source-for-JavaScript/raw/gh-pages/javascripts/apigee.js" type="text/javascript"></script>
 
-    <script type="text/javascript">
-      /* <![CDATA[ */
-        $(document).ready(function() {
-          sourceCall.callAPI(apiRequest,callParams);
-        });
-        var endPoint = "https://earth2marsh-api.apigee.com/twitter";
-        var apiRequest = "/1/statuses/home_timeline.json";
-        var sourceCall = new ComApigeeApiCaller(endPoint); //Instantiates the object
-        var callParams = {
-          "containerId" : "response_container", //(OPTIONAL, if excluded no HTML output will be written) HTML container that will be filled
-          "callVerb" : "GET", //(OPTIONAL, defaults to GET) request verb
-          "htmlConstruct" : "ul", //(OPTIONAL, defaults to ul) the HTML construct (ul, ol, dl, or div) that will be written
-          "extraParams" : { //(OPTIONAL, extra URL parameters to append)
-          }
-        };
-      /* ]]> */
-
-    </script>
     <style type="text/css">
       * { margin: 0; padding: 0; }
       :focus { outline: 0; }
@@ -39,6 +21,7 @@
       #response_container ul {
         list-style-type: none;
         font-family: arial, sans-serif;
+	    margin: 1em 5em;
       }
       #response_container ul li {
         border: 1px solid #eaeef2;
@@ -77,14 +60,39 @@
         color: #011f3b;
         background-color: #c2c7d1;
       }
+      p {margin:.8em;}
     </style>
   </head>
   <body>
   <a href="https://github.com/apigee/Apigee-Source-for-JavaScript"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-<h1>An example application using Apigee Source.</h1>
-<p><a href="https://github.com/apigee/Apigee-Source-for-JavaScript/zipball/gh-pages">Download the framework!</a></p>
+<h1>Build better prototypes using the Apigee Source framework</h1>
 <p>Learn about Apigee Source.</p>
-<p>Try an <a href="examples/oldest-users.html">example</a>!</p>
-    <div id="response_container"></div>
-  </body>
+<p><a href="https://github.com/apigee/Apigee-Source-for-JavaScript/zipball/gh-pages">Download the framework</a></p>
+<p>See an <a href="examples/home_timeline.html">example application</a></p>
+<p>The following data comes from an authenticated request to the Twitter API:</p>
+<div id="response_container"></div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+          sourceCall.callAPI(apiRequest,callParams);
+        });
+        var endPoint = "https://demo-api.apigee.com/twitter";
+        var apiRequest = "/1/account/verify_credentials.json";
+        var sourceCall = new ComApigeeApiCaller(endPoint); //Instantiates the object
+        var callParams = {
+          "containerId" : "response_container", //(OPTIONAL, if excluded no HTML output will be written) HTML container that will be filled
+          "callVerb" : "GET", //(OPTIONAL, defaults to GET) request verb
+          "htmlConstruct" : "ul", //(OPTIONAL, defaults to ul) the HTML construct (ul, ol, dl, or div) that will be written
+          "extraParams" : { //(OPTIONAL, extra URL parameters to append)
+          },
+    	  "includeElements" : { 
+    	  	"screen_name" : true,
+    	  	"name" : true,
+    	  	"status" : {
+      			"text" : true
+    	  	}
+  		  }
+        };
+    </script>
+
+</body>
 </html>
