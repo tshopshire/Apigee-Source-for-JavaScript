@@ -2,8 +2,16 @@
   * This library depends on jQuery and the base64 jQuery plugin (http://plugins.jquery.com/project/base64)
 */
 
+/**
+  * Accepts the endpoint (ex: "http://user.apigee.com/") and builds the API Caller object
+*/
 function ComApigeeApiCaller(endPoint) {
     var theCall = this;
+      /**
+      * Takes an API Request (ex: "statuses/public_timeline.json") and an optional array of specified call parameters.
+      * theCall's rawResponse is set to the raw JSON object response.
+      * If a DOM container ID was provided, response is also sent through processCall.
+    */
     this.callAPI = function (apiRequest, callParams) {
         if (!apiRequest) {
             var apiRequest = ""
@@ -64,6 +72,9 @@ function ComApigeeApiCaller(endPoint) {
             }
         })
     };
+    /**
+      * Filters response data based on submitted prototype object (callParams.includeElements)
+    */
     this.pruneResponse = function (rawData) {
         var prunedData = {};
         var pruneLoop = function (rawObject, protoObject, prunedObject) {
@@ -88,11 +99,18 @@ function ComApigeeApiCaller(endPoint) {
         }
         return prunedData
     };
+    /**
+      * Takes the request data, an optional DOM ID of the target container, and an HTML construct (ul, ol, div, or dl).
+      * setConstruct and iterateData format the response; the target container is populated accordingly.
+    */
     this.processCall = function (data, containerId, htmlConstruct) {
         theCall.setConstruct(htmlConstruct);
         var outputHTML = this.iterateData(data);
         $("#" + containerId).html(outputHTML)
     };
+    /**
+      * Loops through the response data and formats it based on the construct.
+    */
     this.iterateData = function (loopData) {
         var tempText = theCall.htmlStructure[0];
         for (var key in loopData) {
@@ -110,6 +128,9 @@ function ComApigeeApiCaller(endPoint) {
         tempText += theCall.htmlStructure[1];
         return tempText
     };
+    /**
+      * Sets the HTML construct based on the provided parameter (ul, ol, div, or dl).
+    */
     this.setConstruct = function (htmlConstruct) {
         var constructKey = "<" + htmlConstruct.toLowerCase() + ">";
         var constructMap = [
@@ -128,14 +149,23 @@ function ComApigeeApiCaller(endPoint) {
             }
         }
     };
+    /**
+      * Adds a CSS class to the rendered object based on the element's name.
+    */
     this.addClassToConstruct = function (rawTag, newClass) {
         return rawTag.replace(">", ' class="' + newClass + '">')
     }
 }
+/**
+  * Handles and stores authentication information.
+*/
 function ComApigeeAuthHandler() {
     var theHandler = this;
     this.userName = "";
     this.userPass = "";
+    /**
+      * Checks to see if the browser supports localStorage; returns true or false accordingly.
+    */
     this.checkLocalStorage = function () {
         try {
             return "localStorage" in window && window.localStorage !== null
@@ -144,6 +174,10 @@ function ComApigeeAuthHandler() {
         }
     };
     this.doesLocalStorage = this.checkLocalStorage();
+    /**
+      * If the browser supports localStorage and the credentials exist in LS, confirms that the user wants to keep using these, and either sets userName and userPass accordingly or calls getCredentials to query for them.
+      * If the browser does not support localStorage (or the credentials do not exist), call getCredentials to query for them.
+    */
     this.init = function () {
         var doSet = true;
         if (theHandler.doesLocalStorage) {
@@ -157,11 +191,18 @@ function ComApigeeAuthHandler() {
             this.getCredentials()
         }
     };
+    /**
+      * Prompts for username and password.
+      * Passes prompted data into setCredentials.
+    */
     this.getCredentials = function () {
         theHandler.userName = prompt("Log into your Apigee Source account.\nEmail:", theHandler.userName);
         theHandler.userPass = prompt("Password:", theHandler.userPass);
         this.setCredentials()
     };
+    /**
+      * If the browser supports localStorage, store the prompted data.
+    */
     this.setCredentials = function () {
         if (theHandler.doesLocalStorage && theHandler.userName != null && theHandler.userName != "null" && theHandler.userPass != null && theHandler.userPass != "null") {
             localStorage.userName = theHandler.userName;
